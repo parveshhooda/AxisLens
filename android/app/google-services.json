@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "570146317436",
+    "project_id": "break-the-app",
+    "storage_bucket": "break-the-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:570146317436:android:ad5d9a6b84dafcffb4d5f9",
+        "android_client_info": {
+          "package_name": "com.mycompany.breaktheapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUh7YSetgom8DUj3RpQeqI3Dx_GUbFgUE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

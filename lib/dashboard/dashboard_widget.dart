@@ -1,3 +1,4 @@
+import '/auth/firebase_auth/auth_util.dart';
 import '/backend/api_requests/api_calls.dart';
 import '/backend/backend.dart';
 import '/components/about_the_platform_new_widget.dart';
@@ -21,12 +22,7 @@ import 'dashboard_model.dart';
 export 'dashboard_model.dart';
 
 class DashboardWidget extends StatefulWidget {
-  const DashboardWidget({
-    Key? key,
-    required this.empId,
-  }) : super(key: key);
-
-  final int? empId;
+  const DashboardWidget({Key? key}) : super(key: key);
 
   @override
   _DashboardWidgetState createState() => _DashboardWidgetState();
@@ -88,22 +84,11 @@ class _DashboardWidgetState extends State<DashboardWidget>
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       setState(() {
         FFAppState().isLoading = true;
-        FFAppState().employeeId = widget.empId!;
+        FFAppState().employeeId = FFAppState().employeeId;
       });
       _model.apiResultj1o = await GetAcceptedIssuesCall.call(
         empid: FFAppState().employeeId,
       );
-      _model.empid = await GetIssuesCall.call(
-        empid: FFAppState().employeeId,
-      );
-      setState(() {
-        FFAppState().totalBugsRaised = valueOrDefault<int>(
-          GetIssuesCall.total(
-            (_model.empid?.jsonBody ?? ''),
-          ),
-          0,
-        );
-      });
       if ((_model.apiResultj1o?.succeeded ?? true)) {
         await queryRewardsLogicRecordOnce()
             .then(
@@ -454,19 +439,39 @@ class _DashboardWidgetState extends State<DashboardWidget>
                                                                               0.0,
                                                                               12.0),
                                                                           child:
-                                                                              Text(
-                                                                            valueOrDefault<String>(
-                                                                              FFAppState().totalBugsRaised.toString(),
-                                                                              '0',
+                                                                              FutureBuilder<ApiCallResponse>(
+                                                                            future:
+                                                                                GetIssuesCall.call(
+                                                                              empid: FFAppState().employeeId,
                                                                             ),
-                                                                            textAlign:
-                                                                                TextAlign.center,
-                                                                            style: FlutterFlowTheme.of(context).displaySmall.override(
-                                                                                  fontFamily: 'Plus Jakarta Sans',
-                                                                                  color: FlutterFlowTheme.of(context).primaryText,
-                                                                                  fontSize: 25.0,
-                                                                                  fontWeight: FontWeight.w600,
-                                                                                ),
+                                                                            builder:
+                                                                                (context, snapshot) {
+                                                                              // Customize what your widget looks like when it's loading.
+                                                                              if (!snapshot.hasData) {
+                                                                                return Center(
+                                                                                  child: SizedBox(
+                                                                                    width: 50.0,
+                                                                                    height: 50.0,
+                                                                                    child: CircularProgressIndicator(
+                                                                                      color: FlutterFlowTheme.of(context).primary,
+                                                                                    ),
+                                                                                  ),
+                                                                                );
+                                                                              }
+                                                                              final textGetIssuesResponse = snapshot.data!;
+                                                                              return Text(
+                                                                                GetIssuesCall.total(
+                                                                                  textGetIssuesResponse.jsonBody,
+                                                                                ).toString(),
+                                                                                textAlign: TextAlign.center,
+                                                                                style: FlutterFlowTheme.of(context).displaySmall.override(
+                                                                                      fontFamily: 'Plus Jakarta Sans',
+                                                                                      color: FlutterFlowTheme.of(context).primaryText,
+                                                                                      fontSize: 25.0,
+                                                                                      fontWeight: FontWeight.w600,
+                                                                                    ),
+                                                                              );
+                                                                            },
                                                                           ),
                                                                         ),
                                                                         Text(
@@ -800,7 +805,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
                                                                             context)
                                                                         .size
                                                                         .height *
-                                                                    0.6,
+                                                                    0.55,
                                                                 child:
                                                                     AboutThePlatformNewWidget(),
                                                               ),
@@ -882,7 +887,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
                                     160.0, 0.0, 20.0, 0.0),
                                 child: Lottie.network(
                                   'https://assets9.lottiefiles.com/packages/lf20_dbXyBN/data.json',
-                                  height: 150.0,
+                                  height: 198.0,
                                   fit: BoxFit.fitHeight,
                                   animate: true,
                                 ),

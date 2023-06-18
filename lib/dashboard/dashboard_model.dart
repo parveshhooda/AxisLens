@@ -1,3 +1,4 @@
+import '/auth/firebase_auth/auth_util.dart';
 import '/backend/api_requests/api_calls.dart';
 import '/backend/backend.dart';
 import '/components/about_the_platform_new_widget.dart';
@@ -23,8 +24,6 @@ class DashboardModel extends FlutterFlowModel {
 
   // Stores action output result for [Backend Call - API (getAcceptedIssues)] action in Dashboard widget.
   ApiCallResponse? apiResultj1o;
-  // Stores action output result for [Backend Call - API (getIssues)] action in Dashboard widget.
-  ApiCallResponse? empid;
   List<RewardsLogicRecord> simpleSearchResults = [];
   // Stores action output result for [Custom Action - findTotalLP] action in Dashboard widget.
   int? lp;

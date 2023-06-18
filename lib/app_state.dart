@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import '/backend/backend.dart';
 import 'backend/api_requests/api_manager.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:csv/csv.dart';
+import 'package:synchronized/synchronized.dart';
 import 'flutter_flow/flutter_flow_util.dart';
 import 'dart:convert';
 
@@ -15,12 +17,12 @@ class FFAppState extends ChangeNotifier {
   FFAppState._internal();
 
   Future initializePersistedState() async {
-    prefs = await SharedPreferences.getInstance();
-    _safeInit(() {
-      _employeeId = prefs.getInt('ff_employeeId') ?? _employeeId;
+    secureStorage = FlutterSecureStorage();
+    await _safeInitAsync(() async {
+      _employeeId = await secureStorage.getInt('ff_employeeId') ?? _employeeId;
     });
-    _safeInit(() {
-      _username = prefs.getString('ff_username') ?? _username;
+    await _safeInitAsync(() async {
+      _username = await secureStorage.getString('ff_username') ?? _username;
     });
   }
 
@@ -29,7 +31,7 @@ class FFAppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  late SharedPreferences prefs;
+  late FlutterSecureStorage secureStorage;
 
   int _CountMedia = 2;
   int get CountMedia => _CountMedia;
@@ -41,7 +43,11 @@ class FFAppState extends ChangeNotifier {
   int get employeeId => _employeeId;
   set employeeId(int _value) {
     _employeeId = _value;
-    prefs.setInt('ff_employeeId', _value);
+    secureStorage.setInt('ff_employeeId', _value);
+  }
+
+  void deleteEmployeeId() {
+    secureStorage.delete(key: 'ff_employeeId');
   }
 
   String _securityAnswer = '';
@@ -152,7 +158,11 @@ class FFAppState extends ChangeNotifier {
   String get username => _username;
   set username(String _value) {
     _username = _value;
-    prefs.setString('ff_username', _value);
+    secureStorage.setString('ff_username', _value);
+  }
+
+  void deleteUsername() {
+    secureStorage.delete(key: 'ff_username');
   }
 
   int _maxPointsRedeemable = 0;
@@ -190,6 +200,12 @@ class FFAppState extends ChangeNotifier {
   set AboutTheAppFlag(bool _value) {
     _AboutTheAppFlag = _value;
   }
+
+  bool _LeaderboardBlurr = false;
+  bool get LeaderboardBlurr => _LeaderboardBlurr;
+  set LeaderboardBlurr(bool _value) {
+    _LeaderboardBlurr = _value;
+  }
 }
 
 LatLng? _latLngFromString(String? val) {
@@ -212,4 +228,47 @@ Future _safeInitAsync(Function() initializeField) async {
   try {
     await initializeField();
   } catch (_) {}
+}
+
+extension FlutterSecureStorageExtensions on FlutterSecureStorage {
+  static final _lock = Lock();
+
+  Future<void> writeSync({required String key, String? value}) async =>
+      await _lock.synchronized(() async {
+        await write(key: key, value: value);
+      });
+
+  void remove(String key) => delete(key: key);
+
+  Future<String?> getString(String key) async => await read(key: key);
+  Future<void> setString(String key, String value) async =>
+      await writeSync(key: key, value: value);
+
+  Future<bool?> getBool(String key) async => (await read(key: key)) == 'true';
+  Future<void> setBool(String key, bool value) async =>
+      await writeSync(key: key, value: value.toString());
+
+  Future<int?> getInt(String key) async =>
+      int.tryParse(await read(key: key) ?? '');
+  Future<void> setInt(String key, int value) async =>
+      await writeSync(key: key, value: value.toString());
+
+  Future<double?> getDouble(String key) async =>
+      double.tryParse(await read(key: key) ?? '');
+  Future<void> setDouble(String key, double value) async =>
+      await writeSync(key: key, value: value.toString());
+
+  Future<List<String>?> getStringList(String key) async =>
+      await read(key: key).then((result) {
+        if (result == null || result.isEmpty) {
+          return null;
+        }
+        return CsvToListConverter()
+            .convert(result)
+            .first
+            .map((e) => e.toString())
+            .toList();
+      });
+  Future<void> setStringList(String key, List<String> value) async =>
+      await writeSync(key: key, value: ListToCsvConverter().convert([value]));
 }

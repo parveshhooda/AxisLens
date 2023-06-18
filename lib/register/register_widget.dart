@@ -1,3 +1,4 @@
+import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -1118,15 +1119,11 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                   userCreateData, userRecordReference);
                               _shouldSetState = true;
 
-                              context.goNamed(
-                                'Dashboard',
-                                queryParameters: {
-                                  'empId': serializeParam(
-                                    int.tryParse(_model.textController4.text),
-                                    ParamType.int,
-                                  ),
-                                }.withoutNulls,
-                              );
+                              context.goNamed('Dashboard');
+
+                              setState(() {
+                                FFAppState().employeeId = widget.empId;
+                              });
                             } else {
                               setState(() {
                                 FFAppState().RegisterFormValidated = true;

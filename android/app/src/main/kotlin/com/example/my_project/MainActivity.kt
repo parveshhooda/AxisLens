@@ -1,4 +1,4 @@
-package com.mycompany.breaktheapp
+package com.axisbank.axislensapp
 
 import io.flutter.embedding.android.FlutterActivity
 

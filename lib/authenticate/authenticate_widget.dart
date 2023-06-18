@@ -277,15 +277,7 @@ class _AuthenticateWidgetState extends State<AuthenticateWidget> {
                                               _model.textController.text) ==
                                           functions.toUpperCase(
                                               columnUserRecord!.answer)) {
-                                        context.goNamed(
-                                          'Dashboard',
-                                          queryParameters: {
-                                            'empId': serializeParam(
-                                              widget.empId,
-                                              ParamType.int,
-                                            ),
-                                          }.withoutNulls,
-                                        );
+                                        context.goNamed('Dashboard');
 
                                         setState(() {
                                           FFAppState().employeeId =

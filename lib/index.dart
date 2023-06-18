@@ -15,3 +15,4 @@ export '/login/login_widget.dart' show LoginWidget;
 export '/coming_soon/coming_soon_widget.dart' show ComingSoonWidget;
 export '/weekly_challenge/weekly_challenge_widget.dart'
     show WeeklyChallengeWidget;
+export '/loading_page/loading_page_widget.dart' show LoadingPageWidget;

@@ -7,6 +7,25 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:570146317436:android:489a4686b0315e40b4d5f9",
+        "android_client_info": {
+          "package_name": "com.axisbank.axislensapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUh7YSetgom8DUj3RpQeqI3Dx_GUbFgUE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:570146317436:android:ad5d9a6b84dafcffb4d5f9",
         "android_client_info": {
           "package_name": "com.mycompany.breaktheapp"

@@ -25,8 +25,15 @@ service cloud.firestore {
     match /Redeemed/{document} {
       allow create: if true;
       allow read: if true;
-      allow write: if false;
-      allow delete: if false;
+      allow write: if true;
+      allow delete: if true;
+    }
+
+    match /BugsMediaFiles/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if true;
     }
   }
 }

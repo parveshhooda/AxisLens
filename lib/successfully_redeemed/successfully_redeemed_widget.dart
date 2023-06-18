@@ -149,15 +149,7 @@ class _SuccessfullyRedeemedWidgetState
                                     15.0, 15.0, 15.0, 20.0),
                                 child: FFButtonWidget(
                                   onPressed: () async {
-                                    context.goNamed(
-                                      'Dashboard',
-                                      queryParameters: {
-                                        'empId': serializeParam(
-                                          FFAppState().employeeId,
-                                          ParamType.int,
-                                        ),
-                                      }.withoutNulls,
-                                    );
+                                    context.goNamed('Dashboard');
                                   },
                                   text: 'Okay',
                                   options: FFButtonOptions(
